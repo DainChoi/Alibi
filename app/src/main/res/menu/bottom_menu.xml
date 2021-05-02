@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_record"
+        android:enabled="true"
+        android:icon="@drawable/ic_access_time_black_24dp"
+        android:title="Record"/>
+
+    <item
+        android:id="@+id/action_salary"
+        android:enabled="true"
+        android:icon="@drawable/ic_attach_money_black_24dp"
+        android:title="Salary"/>
+
+    <item
+        android:id="@+id/action_profile"
+        android:enabled="true"
+        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:title="Profile"/>
+</menu>
