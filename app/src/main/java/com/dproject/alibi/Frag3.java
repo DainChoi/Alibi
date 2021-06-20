@@ -21,7 +21,7 @@ public class Frag3 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.frag3, container, false);
         ImageButton btn_modify = (ImageButton) view.findViewById(R.id.btn_modify);
-
+/*
         btn_modify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -30,7 +30,7 @@ public class Frag3 extends Fragment {
                 startActivity(intent);
             }
         });
-
+*/
         return view;
     }
 }

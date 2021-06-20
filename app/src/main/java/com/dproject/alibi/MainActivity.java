@@ -1,16 +1,21 @@
 package com.dproject.alibi;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,20 +24,14 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-//    private RecyclerView rv;
-//    private RecyclerView.Adapter mAdapter;
-//    private RecyclerView.LayoutManager mLayoutManager;
+    RecyclerView recyclerView;
+    ImageButton btn_workadd;
+    ImageView empty_imageview;
+    TextView no_data;
 
-    RecyclerView recycle1;
-    RecycleAdapter adapter;
-
-    int imgID[] = {R.drawable.icon, R.drawable.icon, R.drawable.icon, R.drawable.icon, R.drawable.icon,
-            R.drawable.icon, R.drawable.icon, R.drawable.icon, R.drawable.icon, R.drawable.icon};
-
-    String title[] = {"logo1", "logo2", "logo3", "logo4", "logo5", "logo6", "logo7", "logo8", "logo9", "logo10"};
-
-    String content[] = {"test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8", "test9", "test10"};
-
+    MyDatabaseHelper myDB;
+    ArrayList<String> work_num, work_title, work_id, work_address;
+    CustomAdapter customAdapter;
 
 
     @Override
@@ -40,26 +39,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recycle1 = findViewById(R.id.recycle1);
-
-        adapter = new RecycleAdapter();
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        recycle1.setLayoutManager(layoutManager);
-
-        for (int i = 0; i < imgID.length; i++){
-            adapter.addItem(new ItemData(imgID[i],title[i],content[i]));
-        }
-
-        recycle1.setAdapter(adapter);
-
-        adapter.setOnItemClickListner(new OnItemDataClickListener() {
-
-            public void OnItemClick(RecycleAdapter.ViewHolder holder, View view, int position) {
-                ItemData data = adapter.getItem(position);
-                Toast.makeText(getApplicationContext(),data.title+"가 선택됨",Toast.LENGTH_SHORT).show();
-
-            }
-        });
+        recyclerView = findViewById(R.id.recyclerView);
+        btn_workadd = findViewById(R.id.btn_workadd);
+        empty_imageview = findViewById(R.id.empty_imageview); // 근무지가 한 개도 없을 때 나타남
+        no_data = findViewById(R.id.no_data); // 근무지가 한 개도 없을 때 나타남
 
 
         ImageButton btn_setting = findViewById(R.id.btn_setting);
@@ -84,7 +67,99 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        ImageButton btn_workadd = findViewById(R.id.btn_workadd);
+        btn_workadd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MainActivity.this, WorkaddActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
         // 탈퇴 처리
         // mFirebaseAuth.getCurrentUser().delete();
+
+        myDB = new MyDatabaseHelper(MainActivity.this);
+        work_num = new ArrayList<>();
+        work_title = new ArrayList<>();
+        work_id = new ArrayList<>();
+        work_address = new ArrayList<>();
+
+        storeDataInArrays();
+
+        customAdapter = new CustomAdapter(MainActivity.this,this, work_num, work_title, work_id,
+                work_address);
+        recyclerView.setAdapter(customAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1){
+            recreate();
+        }
+    }
+
+    void storeDataInArrays(){
+        Cursor cursor = myDB.readAllData();
+        if(cursor.getCount() == 0){
+            empty_imageview.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.VISIBLE);
+        }else{
+            while (cursor.moveToNext()){
+                work_num.add(cursor.getString(0));
+                work_title.add(cursor.getString(1));
+                work_id.add(cursor.getString(2));
+                work_address.add(cursor.getString(3));
+            }
+            empty_imageview.setVisibility(View.GONE);
+            no_data.setVisibility(View.GONE);
+        }
+    }
+
+    /*
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.my_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.delete_all){
+            confirmDialog();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    */
+
+
+    void confirmDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete All?");
+        builder.setMessage("Are you sure you want to delete all Data?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                MyDatabaseHelper myDB = new MyDatabaseHelper(MainActivity.this);
+                myDB.deleteAllData();
+                //Refresh Activity
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        builder.create().show();
+    }
+
 }
