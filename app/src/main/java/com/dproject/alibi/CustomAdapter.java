@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,15 +25,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     private Context context;
     private Activity activity;
     private ArrayList work_num, work_title, work_id, work_address;
+    private ImageButton btn_modify2;
 
     CustomAdapter(Activity activity, Context context, ArrayList work_num, ArrayList work_title, ArrayList work_id,
-                  ArrayList work_address){
+                  ArrayList work_address, ImageButton btn_modify2){
         this.activity = activity;
         this.context = context;
         this.work_num = work_num;
         this.work_title = work_title;
         this.work_id = work_id;
         this.work_address = work_address;
+        this.btn_modify2 = btn_modify2;
     }
 
     @NonNull
@@ -51,7 +54,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         holder.work_id_txt.setText(String.valueOf(work_id.get(position)));
         holder.work_address_txt.setText(String.valueOf(work_address.get(position)));
         //Recyclerview onClickListener
-        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
+        holder.btn_modify2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, UpdateActivity.class);
@@ -60,6 +63,15 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 intent.putExtra("id", String.valueOf(work_id.get(position)));
                 intent.putExtra("address", String.valueOf(work_address.get(position)));
                 activity.startActivityForResult(intent, 1);
+            }
+        });
+
+        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, WorkActivity.class);
+                activity.startActivityForResult(intent, 1);
+
             }
         });
 
@@ -76,6 +88,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         ImageView work_num_txt;
         TextView  work_title_txt, work_id_txt, work_address_txt;
         LinearLayout mainLayout;
+        ImageButton btn_modify2;
 
         MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,6 +96,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             work_title_txt = itemView.findViewById(R.id.work_title_txt);
             work_id_txt = itemView.findViewById(R.id.work_id_txt);
             work_address_txt = itemView.findViewById(R.id.work_address_txt);
+            btn_modify2 = itemView.findViewById(R.id.btn_modify2);
             mainLayout = itemView.findViewById(R.id.mainLayout);
             //Animate Recyclerview
             Animation translate_anim = AnimationUtils.loadAnimation(context, R.anim.translate_anim);

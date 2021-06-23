@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     MyDatabaseHelper myDB;
     ArrayList<String> work_num, work_title, work_id, work_address;
     CustomAdapter customAdapter;
+    ImageButton btn_modify2;
 
 
     @Override
@@ -56,16 +57,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button btn_move = findViewById(R.id.btn_move);
-        btn_move.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent intent = new Intent(MainActivity.this, WorkActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
 
         ImageButton btn_workadd = findViewById(R.id.btn_workadd);
         btn_workadd.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         storeDataInArrays();
 
         customAdapter = new CustomAdapter(MainActivity.this,this, work_num, work_title, work_id,
-                work_address);
+                work_address, btn_modify2);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
     }
