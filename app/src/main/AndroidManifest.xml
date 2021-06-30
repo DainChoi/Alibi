@@ -9,7 +9,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".UpdateActivity"></activity>
         <activity android:name=".WorkaddActivity" />
         <activity android:name=".ModifyActivity" />
         <activity android:name=".WorkActivity" />
