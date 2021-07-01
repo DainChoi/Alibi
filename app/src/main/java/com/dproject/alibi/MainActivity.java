@@ -29,7 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private CustomAdapter customAdapter;
     RecyclerView recyclerView;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         empty_imageview = findViewById(R.id.empty_imageview);
         no_data = findViewById(R.id.no_data);
 
-        customAdapter = new CustomAdapter(arrayList, MainActivity.this);
+        customAdapter = new CustomAdapter(arrayList, MainActivity.this );
         recyclerView.setAdapter(customAdapter); // 리사이클러뷰에 어댑터 연결
 
         layoutManager = new LinearLayoutManager(MainActivity.this);
@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
 
 

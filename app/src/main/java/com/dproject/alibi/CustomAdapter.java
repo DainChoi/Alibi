@@ -24,7 +24,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
 
@@ -34,6 +37,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     private ArrayList<MyWork> arrayList;
     private TextView time_in, time_out;
     DatabaseReference databaseReference;
+
+
 
 
     public CustomAdapter(ArrayList<MyWork> arrayList, Context context) {
@@ -47,6 +52,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.my_row, parent, false);
         databaseReference = FirebaseDatabase.getInstance().getReference("Alibi").child("MyWork");
+        time_in = view.findViewById(R.id.time_in);
+        time_out = view.findViewById(R.id.time_out);
+
+
+
         return new MyViewHolder(view);
     }
 
@@ -56,6 +66,36 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         holder.work_title_txt.setText(arrayList.get(position).getTitle());
         holder.work_id_txt.setText(arrayList.get(position).getWorkid());
         holder.work_address_txt.setText(arrayList.get(position).getAddress());
+
+
+        holder.btn_in.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Date currentTime = Calendar.getInstance().getTime();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
+                String output = dateFormat.format(currentTime);
+                time_in.setText(output);
+
+            }
+        });
+
+        holder.btn_out.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Date currentTime = Calendar.getInstance().getTime();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
+                String output = dateFormat.format(currentTime);
+                time_out.setText(output);
+
+            }
+        });
+
+
+
+
+
+
+
 
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +151,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         return arrayList.size();
     }
 
+
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView work_num_txt;
@@ -127,8 +168,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             work_address_txt = itemView.findViewById(R.id.work_address_txt);
             btn_in = itemView.findViewById(R.id.btn_in);
             btn_out = itemView.findViewById(R.id.btn_out);
-            time_in = itemView.findViewById(R.id.time_in);
-            time_out = itemView.findViewById(R.id.time_out);
+           // time_in = itemView.findViewById(R.id.time_in);
+           // time_out = itemView.findViewById(R.id.time_out);
+
 
             mainLayout = itemView.findViewById(R.id.mainLayout);
             //Animate Recyclerview
@@ -137,5 +179,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         }
 
     }
+
+
 
 }
