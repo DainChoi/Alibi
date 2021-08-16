@@ -24,6 +24,13 @@ android {
 
 }
 
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -40,4 +47,10 @@ dependencies {
     implementation 'com.android.support:cardview-v7:28.0.0-alpha1'
     //noinspection GradleCompatible
     implementation 'com.android.support:recyclerview-v7:28.0.0-alpha1'
+
+    implementation 'com.github.pedroSG94:AutoPermissions:1.0.3' // permission
+    implementation 'org.altbeacon:android-beacon-library:2+' // altbeacon
+//noinspection GradleCompatible
+    implementation 'com.android.support:localbroadcastmanager:28.0.0'
+
 }
