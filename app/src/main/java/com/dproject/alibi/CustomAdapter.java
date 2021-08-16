@@ -1,5 +1,7 @@
 package com.dproject.alibi;
 
+// MainActivity recyclerview adapter
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,6 +39,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     private ArrayList<MyWork> arrayList;
     private TextView time_in, time_out;
     DatabaseReference databaseReference;
+    DatabaseReference databaseReference_time_in;
 
 
 
@@ -54,6 +57,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         databaseReference = FirebaseDatabase.getInstance().getReference("Alibi").child("MyWork");
         time_in = view.findViewById(R.id.time_in);
         time_out = view.findViewById(R.id.time_out);
+        databaseReference_time_in = FirebaseDatabase.getInstance().getReference("Alibi").child("TimeIn");
 
 
 
@@ -89,12 +93,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
             }
         });
-
-
-
-
-
-
 
 
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {

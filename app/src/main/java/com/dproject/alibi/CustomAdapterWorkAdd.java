@@ -64,7 +64,8 @@ class CustomAdapterWorkAdd extends RecyclerView.Adapter<CustomAdapterWorkAdd.Cus
                         String address = holder.work_address_txt.getText().toString();
                         String workid = holder.work_id_txt.getText().toString();
                         MyWork mywork = new MyWork(title, workid, address);
-                        databaseReference.push().setValue(mywork);
+                        // databaseReference.push().setValue(mywork);
+                        databaseReference.child(mywork.getWorkid()).setValue(mywork);
 
 
                     }
