@@ -29,22 +29,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.pedro.library.AutoPermissions;
-import com.pedro.library.AutoPermissionsListener;
-
-import org.altbeacon.beacon.Beacon;
-import org.altbeacon.beacon.BeaconConsumer;
-import org.altbeacon.beacon.BeaconManager;
-import org.altbeacon.beacon.BeaconParser;
-import org.altbeacon.beacon.Identifier;
-import org.altbeacon.beacon.MonitorNotifier;
-import org.altbeacon.beacon.RangeNotifier;
-import org.altbeacon.beacon.Region;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
-public class MainActivity extends AppCompatActivity  implements BeaconConsumer, AutoPermissionsListener {
+public class MainActivity extends AppCompatActivity {
 
     private CustomAdapter customAdapter;
     RecyclerView recyclerView;
@@ -57,22 +45,11 @@ public class MainActivity extends AppCompatActivity  implements BeaconConsumer, 
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
 
-    TextView textView;
-    private BeaconManager beaconManager;
-    String beaconUUID="E2C56DB5-DFFB-48D2-B060-D0F5A71096E0"; // beacon -uuid
-    private String TAG = "MainActivity";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        textView=findViewById(R.id.tv_message);
-        AutoPermissions.Companion.loadAllPermissions(this,101); // AutoPermissions
-        beaconManager = BeaconManager.getInstanceForApplication(this);
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
-        beaconManager.bind(this);
 
         recyclerView = findViewById(R.id.recyclerView);
         btn_workadd = findViewById(R.id.btn_workadd);
@@ -144,90 +121,6 @@ public class MainActivity extends AppCompatActivity  implements BeaconConsumer, 
 
 
     }
-
-    @Override
-    public void onBeaconServiceConnect() { beaconManager.removeAllMonitorNotifiers();
-
-        class ThreadTest implements Runnable {
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                Handler mHandler = new Handler(Looper.getMainLooper());
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        beaconManager.setRangeNotifier(new RangeNotifier()
-                        {
-                            @Override
-                            public void didRangeBeaconsInRegion(Collection beacons, Region region)
-                            {
-                                if (beacons.size() > 0)
-                                {
-                                    Log.i(TAG, "The first beacon I see is about "+((Beacon)beacons.iterator().next()).getDistance()+" meters away.");
-                                }
-                            }
-                        });
-
-                        beaconManager.addMonitorNotifier(new MonitorNotifier() {
-                            @Override
-                            public void didEnterRegion(Region region) {
-                                Log.i(TAG, "I just saw an beacon for the first time!");
-                                Toast.makeText(MainActivity.this, "didEnterRegion - 비콘 연결됨", Toast.LENGTH_SHORT).show();
-                                textView.setText("Beacon connected");
-
-                            }
-
-                            @Override
-                            public void didExitRegion(Region region) {
-                                Log.i(TAG, "I no longer see an beacon");
-                                Toast.makeText(MainActivity.this, "didExitRegion - 비콘 연결 끊김", Toast.LENGTH_SHORT).show();
-                                textView.setText("Beacon disconnected");
-                            }
-
-                            @Override
-                            public void didDetermineStateForRegion(int state, Region region) {
-                                Log.i(TAG, "I have just switched from seeing/not seeing beacons: "+state);
-                            }
-
-                        });
-                        try {
-                            beaconManager.startMonitoringBeaconsInRegion(new Region("beacon", Identifier.parse(beaconUUID), null, null));
-                        } catch (RemoteException e) {    }
-                        try
-                        {
-                            beaconManager.startRangingBeaconsInRegion(new Region("beacon", Identifier.parse(beaconUUID), null, null));
-                        }
-                        catch (RemoteException e)
-                        {
-                        }
-
-                    }
-
-                }, 0);
-            }
-        }
-
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        beaconManager.unbind(this);
-    }
-
-    @Override
-    public void onDenied(int i, String[] strings) {
-    }
-
-    @Override
-    public void onGranted(int i, String[] strings) {
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-    }
-
 
 
 
