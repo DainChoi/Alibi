@@ -70,7 +70,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
         holder.btn_in.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { //ERROR
+            public void onClick(View v) {
                 Date currentTime = Calendar.getInstance().getTime();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
                 String output = dateFormat.format(currentTime);
