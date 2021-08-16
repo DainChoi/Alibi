@@ -46,6 +46,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     private TextView tv_time_in, tv_time_out;
     DatabaseReference databaseReference;
     DatabaseReference databaseReference_time_in;
+    DatabaseReference databaseReference_time_out;
 
 
 
@@ -65,6 +66,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         tv_time_in = view.findViewById(R.id.time_in);
         tv_time_out = view.findViewById(R.id.time_out);
         databaseReference_time_in = FirebaseDatabase.getInstance().getReference("Alibi").child("TimeIn");
+        databaseReference_time_out = FirebaseDatabase.getInstance().getReference("Alibi").child("TimeOut");
 
 
 
@@ -102,6 +104,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 Date currentTime = Calendar.getInstance().getTime();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
                 String output = dateFormat.format(currentTime);
+                TimeOut time_out = new TimeOut(output);
+                databaseReference_time_out.child(time_out.getTime_out()).setValue(time_out);
                 tv_time_out.setText(output);
 
             }
