@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +24,14 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,7 +43,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     private Activity activity;
     private ImageButton btn_in, btn_out;
     private ArrayList<MyWork> arrayList;
-    private TextView time_in, time_out;
+    private TextView tv_time_in, tv_time_out;
     DatabaseReference databaseReference;
     DatabaseReference databaseReference_time_in;
 
@@ -54,9 +60,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.my_row, parent, false);
+
         databaseReference = FirebaseDatabase.getInstance().getReference("Alibi").child("MyWork");
-        time_in = view.findViewById(R.id.time_in);
-        time_out = view.findViewById(R.id.time_out);
+        tv_time_in = view.findViewById(R.id.time_in);
+        tv_time_out = view.findViewById(R.id.time_out);
         databaseReference_time_in = FirebaseDatabase.getInstance().getReference("Alibi").child("TimeIn");
 
 
@@ -78,7 +85,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 Date currentTime = Calendar.getInstance().getTime();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
                 String output = dateFormat.format(currentTime);
-                time_in.setText(output);
+                // output = holder.time_in.getText().toString();
+                // time_in.setText(output);
+                TimeIn time_in = new TimeIn(output);
+                databaseReference_time_in.child(time_in.getTime_in()).setValue(time_in);
+                tv_time_in.setText(output);
+
+
 
             }
         });
@@ -89,7 +102,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 Date currentTime = Calendar.getInstance().getTime();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
                 String output = dateFormat.format(currentTime);
-                time_out.setText(output);
+                tv_time_out.setText(output);
 
             }
         });
@@ -138,6 +151,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     }
 
+
     private void deleteItem(int position) {
         arrayList.remove(position);
         notifyItemRemoved(position);
@@ -156,7 +170,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         TextView  work_title_txt, work_id_txt, work_address_txt;
         LinearLayout mainLayout;
         ImageButton btn_in, btn_out;
-        TextView time_in, time_out;
+        TextView tv_time_in, tv_time_out;
 
         MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -166,8 +180,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             work_address_txt = itemView.findViewById(R.id.work_address_txt);
             btn_in = itemView.findViewById(R.id.btn_in);
             btn_out = itemView.findViewById(R.id.btn_out);
-           // time_in = itemView.findViewById(R.id.time_in);
-           // time_out = itemView.findViewById(R.id.time_out);
+            tv_time_in = itemView.findViewById(R.id.time_in);
+            tv_time_out = itemView.findViewById(R.id.time_out);
 
 
             mainLayout = itemView.findViewById(R.id.mainLayout);

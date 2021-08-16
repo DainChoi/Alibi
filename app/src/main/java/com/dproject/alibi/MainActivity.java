@@ -85,31 +85,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // DB를 가져오던 중 에러 발생 시
-                Log.e("Frag4", String.valueOf(databaseError.toException())); // 에러문 출력
+                Log.e("MyWork Error", String.valueOf(databaseError.toException())); // 에러문 출력
             }
         });
 
-        databaseReference_time_in = database.getReference("Alibi").child("TimeIn"); // DB 테이블 연결
-        databaseReference_time_in.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // 파이어베이스 데이터베이스의 데이터를 받아오는 곳
-                arrayList.clear(); // 기존 배열리스트가 존재하지 않게 초기화
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) { // 반복문으로 데이터 List를 추출해냄
-                    MyWork mywork = snapshot.getValue(MyWork.class); // UserAccount 객체에 데이터 담음
-                    arrayList.add(mywork); // 담은 데이터들을 배열리스트에 넣고 리사이클러뷰로 보낼 준비
-                }
-                // adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
-                customAdapter.notifyDataSetChanged();
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // DB를 가져오던 중 에러 발생 시
-                Log.e("Frag4", String.valueOf(databaseError.toException())); // 에러문 출력
-            }
-        });
 
         customAdapter = new CustomAdapter(arrayList, MainActivity.this);
         recyclerView.setAdapter(customAdapter); // 리사이클러뷰에 어댑터 연결
