@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+//import android.graphics.Region;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,6 +25,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.estimote.sdk.Beacon;
+import com.estimote.sdk.Region;
+import com.estimote.sdk.BeaconManager;
+import com.estimote.sdk.SystemRequirementsChecker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,6 +37,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,17 +54,33 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReference_time_in;
 
+    //비콘
+    private BeaconManager beaconManager;
+    private Region region;
+    private TextView tvId;
+    private boolean isConnected;
+    //비콘
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //비콘
+        tvId = (TextView) findViewById(R.id.tvId);
+        beaconManager = new BeaconManager(this);
+        //비콘
+
+
         recyclerView = findViewById(R.id.recyclerView);
         btn_workadd = findViewById(R.id.btn_workadd);
         btn_setting = findViewById(R.id.btn_setting);
         empty_imageview = findViewById(R.id.empty_imageview);
         no_data = findViewById(R.id.no_data);
+
+
+
 
         customAdapter = new CustomAdapter(arrayList, MainActivity.this );
         recyclerView.setAdapter(customAdapter); // 리사이클러뷰에 어댑터 연결
@@ -89,6 +113,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //비콘
+        beaconManager.setRangingListener(new BeaconManager.RangingListener() {
+            @Override
+            public void onBeaconsDiscovered(com.estimote.sdk.Region region, List<Beacon> list) {
+                if(!list.isEmpty()){
+                    Beacon nearestBeacon = list.get(0);
+                    Log.d("Airport", "Nearest places : " + nearestBeacon.getRssi());
+
+                    tvId.setText(nearestBeacon.getRssi() + "");
+
+                    if(!isConnected && nearestBeacon.getRssi() > -70){
+                        isConnected = true;
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                        dialog.setTitle("알림").setMessage("비콘연결")
+                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int which) {
+
+                                    }
+                                }).create().show();
+                    }
+                    else{
+                        Toast.makeText(MainActivity.this, "연결종료", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+        region = new Region("ranged region", UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"), 40010, 55026);
+        //비콘
 
 
         customAdapter = new CustomAdapter(arrayList, MainActivity.this);
@@ -124,7 +177,21 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    //비콘
+    @Override
+    protected void onResume(){
+        super.onResume();
+        SystemRequirementsChecker.checkWithDefaultDialogs(this);
+        beaconManager.connect((new BeaconManager.ServiceReadyCallback() {
+            @Override
+            public void onServiceReady() {
+                beaconManager.startRanging(region);
+            }
+        }));
+    }
 
+
+    //비콘
 
 
 

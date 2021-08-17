@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!--출근 버튼-->
     <item
         android:state_selected="true"
-        android:color="@android:color/black" />
+        android:drawable="@drawable/btn_in_off" />
 
+    <!--퉤근 버튼-->
     <item
-        android:state_selected="false"
-        android:color="@android:color/darker_gray"/>
+        android:state_selected="true"
+        android:drawable="@drawable/btn_out_off" />
+
 
 </selector>

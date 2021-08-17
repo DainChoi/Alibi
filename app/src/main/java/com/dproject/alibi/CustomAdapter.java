@@ -7,12 +7,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,16 +20,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,7 +35,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     private Context context;
     private Activity activity;
-    private ImageButton btn_in, btn_out;
+    public ImageButton btn_in, btn_out;
     private ArrayList<MyWork> arrayList;
     private TextView tv_time_in, tv_time_out;
     DatabaseReference databaseReference;
@@ -68,6 +62,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         databaseReference_time_in = FirebaseDatabase.getInstance().getReference("Alibi").child("TimeIn");
         databaseReference_time_out = FirebaseDatabase.getInstance().getReference("Alibi").child("TimeOut");
 
+        //
 
 
         return new MyViewHolder(view);
@@ -92,7 +87,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 TimeIn time_in = new TimeIn(output);
                 databaseReference_time_in.child(time_in.getTime_in()).setValue(time_in);
                 tv_time_in.setText(output);
-
 
 
             }
@@ -189,12 +183,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
 
             mainLayout = itemView.findViewById(R.id.mainLayout);
+
+
+
             //Animate Recyclerview
             //Animation translate_anim = AnimationUtils.loadAnimation(context, R.anim.translate_anim);
             //mainLayout.setAnimation(translate_anim);
         }
 
+
     }
+
 
 
 
