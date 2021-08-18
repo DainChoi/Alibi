@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CalendarView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -89,6 +90,17 @@ public class Frag1 extends Fragment {
             public void onCancelled(DatabaseError databaseError) {}
         };
         timeoutRef.addListenerForSingleValueEvent(eventListener2);
+        TextView whenDate = (TextView) view.findViewById(R.id.textView2);
+        CalendarView calendarView = (CalendarView) view.findViewById(R.id.calendarView);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                // todo
+                String date = year + "/" + (month + 1) + "/" + dayOfMonth;
+                whenDate.setText(date); // 선택한 날짜로 설정
+
+            }
+        });
 
         return view;
     }
