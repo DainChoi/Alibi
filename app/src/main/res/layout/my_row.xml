@@ -78,6 +78,8 @@
                 app:layout_constraintStart_toEndOf="@+id/btn_in"
                 app:layout_constraintTop_toTopOf="@+id/btn_in" />
 
+
+
             <TextView
                 android:id="@+id/time_in"
                 android:layout_width="wrap_content"
@@ -103,7 +105,6 @@
                 app:layout_constraintEnd_toEndOf="@+id/btn_out"
                 app:layout_constraintStart_toStartOf="@+id/btn_out"
                 app:layout_constraintTop_toBottomOf="@+id/btn_out" />
-
 
 
 

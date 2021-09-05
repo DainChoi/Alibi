@@ -147,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
         customAdapter = new CustomAdapter(arrayList, MainActivity.this);
         recyclerView.setAdapter(customAdapter); // 리사이클러뷰에 어댑터 연결
 
-
         ImageButton btn_setting = findViewById(R.id.btn_setting);
         btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,6 +188,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }));
     }
+
+
 
 
     //비콘

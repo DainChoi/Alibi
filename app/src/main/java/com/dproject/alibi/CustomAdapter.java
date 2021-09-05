@@ -92,6 +92,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             }
         });
 
+
+
+
+
         holder.btn_out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
