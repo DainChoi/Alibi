@@ -46,9 +46,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     final static MainActivity mainActivity = new MainActivity();
     //static Double beacon_distance = mainActivity.distance; // MainActivity > 변수 수령
-    Double beacon_distance = 0.5; // 변수가 전달이 안되서 임시로 임의의 변수 집어 넣음
+    Double beacon_distance = 1.5; // 변수가 전달이 안되서 임시로 임의의 변수 집어 넣음
     int workable = 0;
-
 
 
     public CustomAdapter(ArrayList<MyWork> arrayList, Context context) {
@@ -226,12 +225,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
             mainLayout = itemView.findViewById(R.id.mainLayout);
 
-            if(beacon_distance > 1){
+            if (beacon_distance > 1) {
                 btn_in.setEnabled(false);
                 btn_out.setEnabled(false);
             }
-
-
 
 
             //Animate Recyclerview
