@@ -7,7 +7,8 @@ public class TimeIn {
         this.time_in = time_in;
     }
 
-    public TimeIn(){}
+    public TimeIn() {
+    }
 
     public String getTime_in() {
         return time_in;

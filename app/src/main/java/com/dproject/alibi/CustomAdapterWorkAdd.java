@@ -59,7 +59,7 @@ class CustomAdapterWorkAdd extends RecyclerView.Adapter<CustomAdapterWorkAdd.Cus
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(context,"추가되었습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "추가되었습니다.", Toast.LENGTH_SHORT).show();
                         String title = holder.work_title_txt.getText().toString();
                         String address = holder.work_address_txt.getText().toString();
                         String workid = holder.work_id_txt.getText().toString();
@@ -85,7 +85,6 @@ class CustomAdapterWorkAdd extends RecyclerView.Adapter<CustomAdapterWorkAdd.Cus
     }
 
 
-
     @Override
     public int getItemCount() {
         return filteredUserDataList.size();
@@ -106,19 +105,18 @@ class CustomAdapterWorkAdd extends RecyclerView.Adapter<CustomAdapterWorkAdd.Cus
     }
 
 
-    public Filter getFilter(){
+    public Filter getFilter() {
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
 
                 String Key = charSequence.toString();
-                if (Key.isEmpty()){
+                if (Key.isEmpty()) {
                     filteredUserDataList = arrayList;
-                }
-                else{
+                } else {
                     ArrayList<Work> listFiltered = new ArrayList<>();
-                    for(Work row : arrayList){
-                        if(row.getWorkid().toLowerCase().contains(Key.toLowerCase())){
+                    for (Work row : arrayList) {
+                        if (row.getWorkid().toLowerCase().contains(Key.toLowerCase())) {
                             listFiltered.add(row);
                         }
                     }
@@ -132,7 +130,7 @@ class CustomAdapterWorkAdd extends RecyclerView.Adapter<CustomAdapterWorkAdd.Cus
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
 
-                filteredUserDataList = (ArrayList<Work>)filterResults.values;
+                filteredUserDataList = (ArrayList<Work>) filterResults.values;
                 notifyDataSetChanged();
 
             }

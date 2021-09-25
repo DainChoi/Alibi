@@ -11,7 +11,8 @@ public class MyWork {
         this.address = address;
     }
 
-    public MyWork(){}
+    public MyWork() {
+    }
 
     public String getTitle() {
         return title;

@@ -37,7 +37,7 @@ public class WorkaddActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
 
-    private CharSequence search="";
+    private CharSequence search = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +102,7 @@ public class WorkaddActivity extends AppCompatActivity {
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(WorkaddActivity.this,MainActivity.class);
+                Intent intent = new Intent(WorkaddActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
 

@@ -62,8 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/selector"
-                android:src="@drawable/btn_in_on"
+                android:background="@drawable/selector_in"
                 app:layout_constraintStart_toStartOf="@+id/work_address_txt"
                 app:layout_constraintTop_toBottomOf="@+id/work_address_txt" />
 
@@ -72,8 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="0dp"
-                android:background="@drawable/selector"
-                android:src="@drawable/btn_out_on"
+                android:background="@drawable/selector_out"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/btn_in"
                 app:layout_constraintTop_toTopOf="@+id/btn_in" />

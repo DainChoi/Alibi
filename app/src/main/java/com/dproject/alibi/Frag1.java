@@ -66,28 +66,30 @@ public class Frag1 extends Fragment {
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     String time_in = ds.child("time_in").getValue(String.class);
                     tv_time_in.setText(time_in); // ERROR: 가장 최근거 하나만 표시됨.
                 }
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         };
         timeinRef.addListenerForSingleValueEvent(eventListener);
 
         ValueEventListener eventListener2 = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     String time_out = ds.child("time_out").getValue(String.class);
                     tv_time_out.setText(time_out); // ERROR: 가장 최근거 하나만 표시됨.
                 }
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         };
         timeoutRef.addListenerForSingleValueEvent(eventListener2);
         TextView whenDate = (TextView) view.findViewById(R.id.textView2);

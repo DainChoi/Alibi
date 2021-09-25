@@ -9,7 +9,8 @@ public class UserAccount {
     private String password;    // 비밀번호
     private String name;
 
-    public UserAccount(){}
+    public UserAccount() {
+    }
 
     public String getIdToken() {
         return idToken;

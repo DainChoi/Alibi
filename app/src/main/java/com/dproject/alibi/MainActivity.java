@@ -68,9 +68,8 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     private BeaconManager beaconManager;
     String beaconUUID = "74278BDA-B644-4520-8F0C-720EAF059935";
     private String TAG = "MainActivity";
-    double distance;
+    public Double distance;
     //비콘
-
 
 
     @Override
@@ -92,8 +91,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         //비콘
 
 
-
-        customAdapter = new CustomAdapter(arrayList, MainActivity.this );
+        customAdapter = new CustomAdapter(arrayList, MainActivity.this);
         recyclerView.setAdapter(customAdapter); // 리사이클러뷰에 어댑터 연결
 
         layoutManager = new LinearLayoutManager(MainActivity.this);
@@ -161,10 +159,10 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                if(beacons.size()>0){
-                    Log.i(TAG, "the first beacon I see is about " + ((Beacon)beacons.iterator().next()).getDistance() + "meters away");
-                    distance = ((Beacon)beacons.iterator().next()).getDistance();
-                    // 거리를 distance에다가 넣는다
+                if (beacons.size() > 0) {
+                    Log.i(TAG, "the first beacon I see is about " + ((Beacon) beacons.iterator().next()).getDistance() + "meters away");
+                    distance = ((Beacon) beacons.iterator().next()).getDistance();
+
                 }
             }
         });
@@ -192,13 +190,11 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         });
         try {
             beaconManager.startMonitoringBeaconsInRegion(new Region("beacon", Identifier.parse(beaconUUID), null, null));
-        } catch (RemoteException e) {    }
-        try
-        {
-            beaconManager.startRangingBeaconsInRegion(new Region("beacon", Identifier.parse(beaconUUID), null, null));
+        } catch (RemoteException e) {
         }
-        catch (RemoteException e)
-        {
+        try {
+            beaconManager.startRangingBeaconsInRegion(new Region("beacon", Identifier.parse(beaconUUID), null, null));
+        } catch (RemoteException e) {
         }
 
 
@@ -237,8 +233,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         return super.onOptionsItemSelected(item);
     }
     */
-
-
 
 
 }

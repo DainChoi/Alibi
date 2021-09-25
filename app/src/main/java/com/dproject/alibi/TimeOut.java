@@ -7,7 +7,8 @@ public class TimeOut {
         this.time_out = time_out;
     }
 
-    public TimeOut(){}
+    public TimeOut() {
+    }
 
     public String getTime_out() {
         return time_out;

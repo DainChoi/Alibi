@@ -46,7 +46,6 @@ public class SettingActivity extends AppCompatActivity {
         });
 
 
-
         // 탈퇴 처리
         // mFirebaseAuth.getCurrentUser().delete();
     }
