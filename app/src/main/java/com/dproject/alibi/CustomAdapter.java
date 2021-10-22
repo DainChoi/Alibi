@@ -24,6 +24,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder>{
 
     private Context context;
     private Activity activity;
@@ -44,10 +45,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     DatabaseReference databaseReference_time_in;
     DatabaseReference databaseReference_time_out;
 
-    final static MainActivity mainActivity = new MainActivity();
-    //static Double beacon_distance = mainActivity.distance; // MainActivity > 변수 수령
-    Double beacon_distance = 1.5; // 변수가 전달이 안되서 임시로 임의의 변수 집어 넣음
+    public double beacon_distance; // MainActivity로부터 변수 전달 받음
     int workable = 0;
+    private String TAG = "CustomAdapter"; // 변수 확인용. 추후 삭제
 
 
     public CustomAdapter(ArrayList<MyWork> arrayList, Context context) {
@@ -71,6 +71,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         btn_in = view.findViewById(R.id.btn_in);
         btn_out = view.findViewById(R.id.btn_out);
 
+        Log.i(TAG, "from MainActivity beacon_distance is " + beacon_distance);
+        // 변수 확인용 Log. 가끔 0으로 표기됨(MainActivity에서 측정을 못했을때)
+        beacon_distance = ((MainActivity)MainActivity.mContext).distance;
+        // MainActivity로부터 변수 전달 받음
+        Log.i(TAG, "choijong beacon_distance is " + beacon_distance);
+        // 변수 확인용 Log. 가끔 0으로 표기됨(위쪽게 0일때)
+        work_clicked(workable);
+
         return new MyViewHolder(view);
     }
 
@@ -84,22 +92,20 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         holder.btn_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { // 클릭 되었을때
-                if (workable == 0) { // 디폴트 0
-                    Date currentTime = Calendar.getInstance().getTime();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
-                    String output = dateFormat.format(currentTime);
-                    // output = holder.time_in.getText().toString();
-                    // time_in.setText(output);
-                    TimeIn time_in = new TimeIn(output);
-                    databaseReference_time_in.child(time_in.getTime_in()).setValue(time_in);
-                    tv_time_in.setText(output);
 
-                    work_clicked();
-                    //btn_in.setEnabled(false);
-                    //btn_out.setEnabled(true);
+                Date currentTime = Calendar.getInstance().getTime();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
+                String output = dateFormat.format(currentTime);
+                // output = holder.time_in.getText().toString();
+                // time_in.setText(output);
+                TimeIn time_in = new TimeIn(output);
+                databaseReference_time_in.child(time_in.getTime_in()).setValue(time_in);
+                tv_time_in.setText(output);
 
-                    workable = 1; // 출근 했다는 의미의 1로 workable 변수 변경
-                }
+                workable = 1; // 출근 했다는 의미의 1로 workable 변수 변경
+                work_clicked(workable);
+
+
             }
         });
 
@@ -107,20 +113,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         holder.btn_out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (workable == 1) { // 출근 한 상태인 1
-                    Date currentTime = Calendar.getInstance().getTime();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
-                    String output = dateFormat.format(currentTime);
-                    TimeOut time_out = new TimeOut(output);
-                    databaseReference_time_out.child(time_out.getTime_out()).setValue(time_out);
-                    tv_time_out.setText(output);
 
-                    work_clicked();
-                    //btn_in.setEnabled(true);
-                    //btn_out.setEnabled(false);
+                Date currentTime = Calendar.getInstance().getTime();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
+                String output = dateFormat.format(currentTime);
+                TimeOut time_out = new TimeOut(output);
+                databaseReference_time_out.child(time_out.getTime_out()).setValue(time_out);
+                tv_time_out.setText(output);
 
-                    workable = 0; // 퇴근했으니 workable 변수 0으로 변경
-                }
+                workable = 0; // 퇴근했으니 workable 변수 0으로 변경
+                work_clicked(workable);
+                btn_in.setEnabled(false); // 퇴근했으니 출근버튼 강제로 비활성화
             }
         });
 
@@ -180,6 +183,28 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         return arrayList.size();
     }
 
+
+    public void work_clicked(int workable) {
+        if (workable == 0) { // 출근 전 상태
+            if (beacon_distance <= 1) { // 비콘 사거리 내
+                btn_in.setEnabled(true); // 출근 버튼 활성화
+                btn_out.setEnabled(false); // 퇴근 버튼 비활성화
+            } else { // 비콘 사거리 외
+                btn_in.setEnabled(false); // 비활성화
+                btn_out.setEnabled(false);
+            }
+        } else if (workable == 1) { // 출근 후 상태
+            if (beacon_distance <= 1) { // 비콘 사거리 내
+                btn_in.setEnabled(false); // 출근 버튼 비활성화
+                btn_out.setEnabled(true); // 퇴근 버튼 활성화
+            } else { // 비콘 사거리 외
+                btn_in.setEnabled(false); // 비활성화
+                btn_out.setEnabled(false);
+            }
+        }
+    }
+
+    /*
     public void work_clicked() {
         if (beacon_distance <= 1) {
             switch (workable) {
@@ -202,6 +227,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         }
 
     }
+
+     */
 
 
     class MyViewHolder extends RecyclerView.ViewHolder {

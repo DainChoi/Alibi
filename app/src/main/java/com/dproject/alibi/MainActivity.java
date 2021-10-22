@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -68,7 +69,9 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     private BeaconManager beaconManager;
     String beaconUUID = "74278BDA-B644-4520-8F0C-720EAF059935";
     private String TAG = "MainActivity";
-    public Double distance;
+
+    public static Context mContext; // CustomAdapter로 변수 전달
+    public double distance; // 원래쓰던거
     //비콘
 
 
@@ -88,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
         beaconManager.bind(this);
+        mContext = this; // CustonAdapter로 변수 전달
         //비콘
 
 
